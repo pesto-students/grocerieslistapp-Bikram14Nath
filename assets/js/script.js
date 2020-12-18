@@ -12,10 +12,9 @@ function checkUser(name) {
     if (users.length > 0) {
         if (users.includes(name)) {
             // get item list
-            
+            const items = getItemListByUser(name);
         } else {
             users.push(name);
-            console.log("inside else", users);
             localStorage.setItem('userData', users.toString());
         }
     } else {
@@ -24,5 +23,21 @@ function checkUser(name) {
     }
 }
 function getItemListByUser(name){
-    let groceryList = localStorage.getItem('groceryList');
+    let groceryList = JSON.parse( localStorage.getItem('groceryList'));
+    let myList = [];
+    if (groceryList !== null && groceryList[name]) {
+        myList = groceryList[name];
+    }
+    console.log(typeof(myList));
+    return myList;
+    // else {
+    //     groceryList = {};
+    //     groceryList[name] = [];
+    // }
+    // groceryList[name].push('pudina');
+    // localStorage.setItem('groceryList', JSON.stringify(groceryList))
+}
+
+addItemToList(){
+    
 }
