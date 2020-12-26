@@ -2,6 +2,7 @@ document.getElementById('user_save_btn').onclick = function () {
     let user_name = document.getElementById('userName').value;
     checkUser(user_name);
 }
+let groceryItems = [];
 
 function checkUser(name) {
     let users = [];
@@ -11,7 +12,6 @@ function checkUser(name) {
     }
     if (users.length > 0) {
         if (users.includes(name)) {
-            // get item list
             const items = getItemListByUser(name);
         } else {
             users.push(name);
@@ -21,6 +21,8 @@ function checkUser(name) {
         users.push(name);
         localStorage.setItem('userData', users.toString());
     }
+    document.getElementById('login-form').classList.add('hide');
+    document.getElementById('item-list').classList.remove('hide');
 }
 function getItemListByUser(name){
     let groceryList = JSON.parse( localStorage.getItem('groceryList'));
@@ -28,7 +30,7 @@ function getItemListByUser(name){
     if (groceryList !== null && groceryList[name]) {
         myList = groceryList[name];
     }
-    console.log(typeof(myList));
+    console.log(myList);
     return myList;
     // else {
     //     groceryList = {};
@@ -37,7 +39,6 @@ function getItemListByUser(name){
     // groceryList[name].push('pudina');
     // localStorage.setItem('groceryList', JSON.stringify(groceryList))
 }
+renderGroceryItems(){
 
-addItemToList(){
-    
 }

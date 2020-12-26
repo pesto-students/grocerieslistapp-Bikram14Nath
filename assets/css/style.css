@@ -4,3 +4,9 @@ body{
 .gl-h-full{
     height: 100%;
 }
+.show{
+    display: block;
+}
+.hide{
+    display: none !important;
+}
