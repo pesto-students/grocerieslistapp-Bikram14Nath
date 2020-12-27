@@ -21,22 +21,23 @@ function checkUser(name) {
   }
   if (users.length > 0) {
     if (users.includes(name)) {
-      this.getItemListByUser(name);
+      const GI = this.getItemListByUser(name);
+      this.renderListItems(GI);
     } else {
       users.push(name);
       localStorage.setItem("userData", users.toString());
       groceryList[name] = [];
       groceryItems = groceryList[name];
-      console.log(groceryList[name]);
-      console.log(groceryList);
+      document.getElementById("left-item").innerHTML =
+        final - groceryItems.length;
     }
   } else {
     users.push(name);
     localStorage.setItem("userData", users.toString());
     groceryList[name] = [];
-    console.log(groceryList[name]);
     groceryItems = groceryList[name];
-    console.log(groceryList);
+    document.getElementById("left-item").innerHTML =
+      final - groceryItems.length;
   }
   document.getElementById("login-form").classList.add("hide");
   document.getElementById("item-list").classList.remove("hide");
@@ -48,27 +49,35 @@ function getItemListByUser(name) {
     groceryList[name] = [];
     groceryItems = groceryList[name];
   }
-  this.renderListItems(groceryItems);
+  return groceryItems;
 }
 function addToBasket(item) {
   groceryList[user].push(item);
-  console.log(groceryList);
+  // saveToBucket(groceryList)
   localStorage.setItem("groceryList", JSON.stringify(groceryList));
 }
 
-function removeFromBasket(item) {
-  const indexItem = groceryList[user].indexOf(item);
-  console.log(indexItem);
+function removeFromBasket(index) {
+  --myitem;
+  document.getElementById("left-item").innerHTML = final - myitem;
+    var list = document.getElementById("myUL");
+    list.removeChild(list.childNodes[index]);
+    groceryList[user].splice(index,1);
+    localStorage.setItem("groceryList", JSON.stringify(groceryList));
 }
 
+function saveToBucket(groceryList) {
+  localStorage.setItem("groceryList", JSON.stringify(groceryList));
+}
 function renderListItems(myGroceryItems) {
   myitem = myGroceryItems.length;
-  console.log(myitem === final);
+  document.getElementById("left-item").innerHTML = final - myitem;
   if (myitem === final) {
     document.getElementById("addbtn").classList.add("hide");
   }
   for (let index = 0; index < myGroceryItems.length; index++) {
     var li = document.createElement("li");
+    li.setAttribute("id", "mylist" + index);
     var t = document.createTextNode(myGroceryItems[index]);
     li.appendChild(t);
     document.getElementById("myUL").appendChild(li);
@@ -76,6 +85,9 @@ function renderListItems(myGroceryItems) {
     var txt = document.createTextNode("\u00D7");
     span.className = "close";
     span.appendChild(txt);
+    span.addEventListener("click", function () {
+      removeFromBasket(index);
+    });
     li.appendChild(span);
   }
 }
@@ -91,7 +103,9 @@ for (i = 0; i < close.length; i++) {
 
 // Create a new list item when clicking on the "Add" button
 function newElement() {
+  let itemIndex = this.getItemListByUser(user).length;
   var li = document.createElement("li");
+  li.setAttribute("id", "mylist" + itemIndex);
   var inputValue = document.getElementById("myInput").value;
   var t = document.createTextNode(inputValue);
   li.appendChild(t);
@@ -107,8 +121,12 @@ function newElement() {
   var txt = document.createTextNode("\u00D7");
   span.className = "close";
   span.appendChild(txt);
+  span.addEventListener("click", function () {
+    removeFromBasket(itemIndex);
+  });
   li.appendChild(span);
   ++myitem;
+  document.getElementById("left-item").innerHTML = final - myitem;
   if (myitem === final) {
     document.getElementById("addbtn").classList.add("hide");
   }
